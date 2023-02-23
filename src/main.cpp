@@ -16,7 +16,10 @@ void setup() {
 void loop() {
   scanBoard();
 
-  delay(1000);
-  Serial.println("Nuova lettura"); 
+ plotSquare();
+
+  
+  //delay(1000);
+  //Serial.println("Nuova lettura");   
 } 
 
