@@ -1,9 +1,22 @@
 #include <Arduino.h>
+#include "board.h"
 
-void setup() {
-  // put your setup code here, to run once:
+/**
+ *  
+ */
+void setup() {  
+  Serial.begin(9600);  
+
+  initBoard();
 }
 
+/**
+ * 
+ */
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  scanBoard();
+
+  delay(1000);
+  Serial.println("Nuova lettura"); 
+} 
+

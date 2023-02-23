@@ -1,0 +1,3 @@
+
+void initBoard();
+void scanBoard();
