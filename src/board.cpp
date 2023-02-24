@@ -6,6 +6,12 @@ int board[8][8][ldrDepth];
 signed long squareAngle[8][8];
 signed long squareQuote[8][8];
 
+const int INIT = 0;
+const int LIFT = 1;
+const int DROP = 2;
+
+int currentSquareStatus[8][8];
+
 const int ldr[8] = {A0, A1, A2, A3, A4, A5, A6, A7};  
 const int vccPin[8] = {2, 3, 4, 5, 6, 8, 9, 10};  
 
@@ -17,14 +23,9 @@ int ldrMaxNextValue = 800;
 long scanTime = 0;
 
 void initBoard() {
-  pinMode(vccPin[0], OUTPUT);   
-  pinMode(vccPin[1], OUTPUT);   
-  pinMode(vccPin[2], OUTPUT);   
-  pinMode(vccPin[3], OUTPUT);   
-  pinMode(vccPin[4], OUTPUT);   
-  pinMode(vccPin[5], OUTPUT);  
-  pinMode(vccPin[6], OUTPUT);   
-  pinMode(vccPin[7], OUTPUT);     
+  for (int i = 0; i < 8; i++) {
+    pinMode(vccPin[i], OUTPUT);   
+  }  
 }
 
 void scanBoard() {
@@ -90,6 +91,31 @@ void liftDropAnalisys() {
       }
       squareAngle[i][j] = ((ldrDepth * xySum) - (xSum * ySum)) / ((ldrDepth * x2Sum) - (xSum * xSum));
       squareQuote[i][j] = (ySum - (squareAngle[i][j] * xSum)) / ldrDepth;
+
+      // lift
+      if (squareQuote[i][j] > 200 && squareAngle[i][j] < -20 && currentSquareStatus[i][j] != LIFT) {
+        if (i == 0 && j == 0) {
+          Serial.print("LIFT[");
+          Serial.print(i);
+          Serial.print("][");
+          Serial.print(j);
+          Serial.println("]");
+        }
+        currentSquareStatus[i][j] = LIFT;
+      }
+
+      // drop
+      if (squareQuote[i][j] < 10 && squareAngle[i][j] > 20 && currentSquareStatus[i][j] != DROP) {
+        if (i == 0 && j == 0) {
+          Serial.print("DROP[");
+          Serial.print(i);
+          Serial.print("][");
+          Serial.print(j);
+          Serial.println("]");   
+        }     
+        currentSquareStatus[i][j] = DROP;
+      }
+
     }
   }
 }
@@ -107,6 +133,7 @@ void plotSquare() {
   Serial.print("Clock:");
   Serial.print(((millis()/1000)%2)*80+10);
   Serial.print(",");
+  
   String squareLabel = "Square:";
   for (int d = 0; d < ldrDepth; d++) {
     Serial.print(squareLabel);

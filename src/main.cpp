@@ -18,7 +18,7 @@ void loop() {
 
   liftDropAnalisys();
 
-  plotSquare();
+  //plotSquare();
   
   //delay(1000);
   //Serial.println("Nuova lettura");   
