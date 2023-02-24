@@ -16,8 +16,9 @@ void setup() {
 void loop() {
   scanBoard();
 
- plotSquare();
+  liftDropAnalisys();
 
+  plotSquare();
   
   //delay(1000);
   //Serial.println("Nuova lettura");   
